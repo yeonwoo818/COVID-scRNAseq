@@ -18,3 +18,41 @@ data1.seurat <- FindClusters(data1.seurat, resolution = 0.6)
 # ElbowPlot(): PCA에서 몇 개의 PC를 사용할지 판단하는 진단용 plot (PC 1~10까지 사용)
 # FindNeighbors(): 각 cell이 PCA 공간에서 어떤 cell들과 가까운지 계산하는 단계. 
 # FindClusters(): 비슷한 cell들을 cluster 단위로 묶는 단계.
+
+
+
+
+# Doublet Deletion Using DoubletFinder
+# Data 1
+DefaultAssay(data1.seurat) <- "RNA"
+data1.seurat.v3 <- data1.seurat
+data1.seurat.v3[["RNA"]] <- as(object = data1.seurat.v3[["RNA"]], Class = "Assay")
+sweep.res <- paramSweep_v3(data1.seurat.v3, PCs = 1:10)
+sweep.stats <- summarizeSweep(sweep.res, GT = FALSE)
+bcmvn <- find.pK(sweep.stats)
+best.pK <- as.numeric(as.character(bcmvn$pK[which.max(bcmvn$BCmetric)]))
+nExp <- round(ncol(data1.seurat) * 0.075)
+homotypic.prop <- modelHomotypic(data1.seurat.v3$seurat_clusters)
+nExp.adj <- round(nExp * (1 - homotypic.prop))
+data1.seurat.v3 <- doubletFinder_v3(
+  data1.seurat.v3,
+  pN = 0.25,
+  pK = best.pK,
+  nExp = nExp.adj,
+  PCs = 1:10
+)
+head(data1.seurat.v3)
+unique(data1.seurat.v3$DF.classifications_0.25_0.005_298)
+df.col1 <- tail(grep("^DF\\.classifications_", colnames(data1.seurat.v3@meta.data), value = TRUE), 1)
+data1.seurat$doublet_class_log <- data1.seurat.v3@meta.data[colnames(data1.seurat), df.col1]
+head(data1.seurat$doublet_class_log)
+data1.singlet <- subset(data1.seurat, subset = doublet_class_log == "Singlet")
+
+
+
+
+
+
+
+
+
