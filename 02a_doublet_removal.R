@@ -9,3 +9,6 @@ ElbowPlot(data1.seurat)
 data1.seurat <- FindNeighbors(data1.seurat, dims = 1:10)
 data1.seurat <- FindClusters(data1.seurat, resolution = 0.6)
 
+
+Log Normalization 하는 이유
+
