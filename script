@@ -14,3 +14,5 @@ library(spam)
 data1.data <- Read10X('~/COVID_preprocessing_Sample1/Solo_Sa1.out/Gene/filtered')
 data2.data <- Read10X('~/COVID_preprocessing_Sample1/Solo_Sa2.out/Gene/filtered')
 data3.data <- Read10X('~/COVID_preprocessing_Sample2/Solo_Sa1.out/Gene/filtered')
+...
+data10.data <- Read10X('~/COVID_preprocessing_Sample3/Solo_Sa4.out/Gene/filtered')
