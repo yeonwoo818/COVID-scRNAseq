@@ -9,6 +9,7 @@ ElbowPlot(data1.seurat)
 data1.seurat <- FindNeighbors(data1.seurat, dims = 1:10)
 data1.seurat <- FindClusters(data1.seurat, resolution = 0.6)
 
+# Data 10 까지 반복
 
 # Log Normalization 하는 이유: scRNA-seq에서 cell마다 읽힌 RNA 양, UMI count, sequencing depth 가 다르기 때문.
 # NormalizeData(): 각 cell의 count를 cell 전체 count 기준으로 보정. gene count / cell total count * 10000 후 로그 변환. 
@@ -48,11 +49,6 @@ data1.seurat$doublet_class_log <- data1.seurat.v3@meta.data[colnames(data1.seura
 head(data1.seurat$doublet_class_log)
 data1.singlet <- subset(data1.seurat, subset = doublet_class_log == "Singlet")
 
-
-
-
-
-
-
+# Data 10 까지 반복
 
 
